@@ -40,22 +40,22 @@ class PersianCalendarUtils {
          * Julian Day Number is not as difficult as it looks. Basically it's a
          * mather of dividing, rounding and multiplying.
          */
-        fun julianToPersian(julianDate: Long): Long {
-            val persianEpochInJulian = julianDate - persianToJulian(475, 0, 1)
-            val cYear = ceil(persianEpochInJulian.toDouble(), 1029983.0)
-            val yCycle =
-                if (cYear != 1029982L) floor((2816 * cYear + 1031337) / 1028522.0).toLong() else 2820L
-            val year = 474L + 2820L * floor(persianEpochInJulian / 1029983.0).toLong() + yCycle
-            val aux = 1L + julianDate - persianToJulian(year, 0, 1)
-            val month = (
-                if (aux > 186L)
-                    ceil((aux - 6L).toDouble() / 30.0) - 1
-                else
-                    ceil(aux.toDouble() / 31.0) - 1
-                ).toInt()
-            val day = (julianDate - (persianToJulian(year, month, 1) - 1L)).toInt()
-            return year shl 16 or (month shl 8).toLong() or day.toLong()
-        }
+//        fun julianToPersian(julianDate: Long): Long {
+//            val persianEpochInJulian = julianDate - persianToJulian(475, 0, 1)
+//            val cYear = ceil(persianEpochInJulian.toDouble(), 1029983.0)
+//            val yCycle =
+//                if (cYear != 1029982L) floor((2816 * cYear + 1031337) / 1028522.0).toLong() else 2820L
+//            val year = 474L + 2820L * floor(persianEpochInJulian / 1029983.0).toLong() + yCycle
+//            val aux = 1L + julianDate - persianToJulian(year, 0, 1)
+//            val month = (
+//                if (aux > 186L)
+//                    ceil((aux - 6L).toDouble() / 30.0) - 1
+//                else
+//                    ceil(aux.toDouble() / 31.0) - 1
+//                ).toInt()
+//            val day = (julianDate - (persianToJulian(year, month, 1) - 1L)).toInt()
+//            return year shl 16 or (month shl 8).toLong() or day.toLong()
+//        }
 
         /**
          * Ceil function in original algorithm

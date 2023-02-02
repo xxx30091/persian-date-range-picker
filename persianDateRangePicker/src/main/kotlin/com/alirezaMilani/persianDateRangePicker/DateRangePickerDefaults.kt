@@ -25,13 +25,13 @@ object DateRangePickerDefaults {
      */
     @Composable
     fun colors(
-        activeDateContainerColor: Color = MaterialTheme.colorScheme.primary,
+        activeDateContainerColor: Color = Color.Black,
         inactiveDateContainerColor: Color = Color.Transparent,
-        activeDateTextColor: Color = MaterialTheme.colorScheme.onPrimary,
-        inactiveDateTextColor: Color = MaterialTheme.colorScheme.onSurface,
+        activeDateTextColor: Color = Color.White,
+        inactiveDateTextColor: Color = Color.Black,
         rangeDateContainerColor: Color = activeDateContainerColor.copy(alpha = .12f),
-        headerContainerColor: Color = MaterialTheme.colorScheme.primary,
-        headerContentColor: Color = MaterialTheme.colorScheme.onPrimary
+        headerContainerColor: Color = Color.Black,
+        headerContentColor: Color = Color.White
     ): DateRangePickerColors = remember(
         headerContainerColor,
         headerContentColor,

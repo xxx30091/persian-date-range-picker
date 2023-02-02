@@ -69,16 +69,16 @@ import kotlin.math.floor
  * @author Alireza Milani
  * @since 2.6.2
  */
-class PersianCalendar : GregorianCalendar {
+class MyCalendar : GregorianCalendar {
 
-    var persianYear = 0
+    var calendarYear = 0
         private set
 
-    var persianMonth = 0
+    var calendarMonth = 0
         private set
         get() = field + 1
 
-    var persianDay = 0
+    var calendarDay = 0
         private set
 
     /**
@@ -86,25 +86,34 @@ class PersianCalendar : GregorianCalendar {
      */
     var delimiter = "/"
 
-    val persianMonthName: String
-        get() = PersianCalendarConstants.PERSIAN_MONTH_NAMES[persianMonth - 1]
+    val calendarMonthName: String
+        get() = PersianCalendarConstants.MONTH_NAMES[calendarMonth - 1]
 
-    val persianWeekDayName: String
+    val calendarWeekDayName: String
         get() = when (get(DAY_OF_WEEK)) {
-            SATURDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[0]
-            SUNDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[1]
-            MONDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[2]
-            TUESDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[3]
-            WEDNESDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[4]
-            THURSDAY -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[5]
-            else -> PersianCalendarConstants.PERSIAN_WEEK_DAY_NAMES[6]
+            SATURDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[0]
+            SUNDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[1]
+            MONDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[2]
+            TUESDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[3]
+            WEDNESDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[4]
+            THURSDAY -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[5]
+            else -> PersianCalendarConstants.CHINESE_WEEK_DAY_NAMES[6]
         }
 
     /**
      * String of Persian Date e.g. *شنبه 01 خرداد 1361*
      */
+//    val persianLongDate: String
+//        get() = "$calendarWeekDayName  $calendarDay  $calendarMonthName  $calendarYear"
     val persianLongDate: String
-        get() = "$persianWeekDayName  $persianDay  $persianMonthName  $persianYear"
+        get() = "$calendarYear-$calendarMonth-$calendarDay"
+
+    val selectedDate: String
+        get() {
+            val month = if (calendarMonth < 10) "0$calendarMonth" else "$calendarMonth"
+            val day = if (calendarDay < 10) "0$calendarDay" else "$calendarDay"
+            return "$calendarYear-$month-$day"
+        }
 
     /**
      * String of Persian Date e.g. *شنبه 01 خرداد 1361 ساعت 10:58:20*
@@ -118,13 +127,11 @@ class PersianCalendar : GregorianCalendar {
      *  **1400[delimiter]01[delimiter]01** default delimiter is '/'
      */
     val persianShortDate: String
-        get() = formatToMilitary(persianYear) + delimiter + formatToMilitary(persianMonth) + delimiter + formatToMilitary(
-            persianDay
-        )
+        get() = formatToMilitary(calendarYear) + delimiter + formatToMilitary(calendarMonth) + delimiter + formatToMilitary(calendarDay)
 
     val persianShortDateTime: String
-        get() = formatToMilitary(persianYear) + delimiter + formatToMilitary(persianMonth) + delimiter + formatToMilitary(
-            persianDay
+        get() = formatToMilitary(calendarYear) + delimiter + formatToMilitary(calendarMonth) + delimiter + formatToMilitary(
+            calendarDay
         ) + " " + formatToMilitary(get(HOUR_OF_DAY)) + ":" + formatToMilitary(get(MINUTE)) + ":" + formatToMilitary(
             get(SECOND)
         )
@@ -134,7 +141,7 @@ class PersianCalendar : GregorianCalendar {
      * Returns true if the given year is a leap year.
      */
     val isPersianLeapYear: Boolean
-        get() = PersianCalendarUtils.isPersianLeapYear(persianYear)
+        get() = PersianCalendarUtils.isPersianLeapYear(calendarYear)
 
     /**
      * Most of the time we don't care about TimeZone when we persisting Date or
@@ -180,23 +187,23 @@ class PersianCalendar : GregorianCalendar {
      * Set the persian date it converts PersianDate to the Julian and
      * assigned equivalent milliseconds to the instance
      */
-    fun setPersianDate(year: Int, month: Int, day: Int) {
-        persianYear = year
-        persianMonth = month - 1
-        persianDay = day
+    fun setCalendarDate(year: Int, month: Int, day: Int) {
+        calendarYear = year
+        calendarMonth = month - 1
+        calendarDay = day
 
         val gregorianYearMonthDay =
-            persianToGregorian(YearMonthDay(persianYear, this.persianMonth - 1, persianDay))
+            persianToGregorian(YearMonthDay(calendarYear, this.calendarMonth - 1, calendarDay))
         set(gregorianYearMonthDay.year, gregorianYearMonthDay.month, gregorianYearMonthDay.day)
     }
 
-    fun setPersianYear(year: Int) {
-        persianYear = year
+    fun setCalendarYear(year: Int) {
+        calendarYear = year
 
         timeInMillis = convertToMillis(
             PersianCalendarUtils.persianToJulian(
-                if (persianYear > 0) persianYear.toLong() else persianYear + 1.toLong(),
-                persianMonth - 1,
+                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
+                calendarMonth - 1,
                 1
             )
         )
@@ -206,43 +213,50 @@ class PersianCalendar : GregorianCalendar {
      * Specify month and set 1 for day of specific month
      */
     fun setPersianMonth(month: Int) {
-        persianMonth = month - 1
+        calendarMonth = month - 1
 
         timeInMillis = convertToMillis(
             PersianCalendarUtils.persianToJulian(
-                if (persianYear > 0) persianYear.toLong() else persianYear + 1.toLong(),
-                persianMonth - 1,
+                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
+                calendarMonth - 1,
                 1
             )
         )
     }
 
     fun setPersianDay(day: Int) {
-        persianDay = day
+        calendarDay = day
 
         timeInMillis = convertToMillis(
             PersianCalendarUtils.persianToJulian(
-                if (persianYear > 0) persianYear.toLong() else persianYear + 1.toLong(),
-                persianMonth - 1,
-                persianDay
+                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
+                calendarMonth - 1,
+                calendarDay
             )
         )
     }
 
-    override fun compareTo(other: Calendar): Int {
-        require(other is PersianCalendar) { "other is not PersianCalendar" }
+    fun setGregorianDay(day: Int) {
+        calendarDay = day
+//        timeInMillis = convertToMillis(
+//
+//        )
+    }
+
+    override fun compareTo(other: java.util.Calendar): Int {
+        require(other is MyCalendar) { "other is not PersianCalendar" }
 
         return when {
-            persianYear < other.persianYear -> -1
-            persianYear > other.persianYear -> 1
+            calendarYear < other.calendarYear -> -1
+            calendarYear > other.calendarYear -> 1
             else -> {
                 when {
-                    persianMonth < other.persianMonth -> -1
-                    persianMonth > other.persianMonth -> 1
+                    calendarMonth < other.calendarMonth -> -1
+                    calendarMonth > other.calendarMonth -> 1
                     else -> {
                         when {
-                            persianDay < other.persianDay -> -1
-                            persianDay > other.persianDay -> 1
+                            calendarDay < other.calendarDay -> -1
+                            calendarDay > other.calendarDay -> 1
                             else -> 0
                         }
                     }
@@ -255,7 +269,7 @@ class PersianCalendar : GregorianCalendar {
      * Add specific amount of fields to the current date for now doesn't handle
      * before 1 farvardin hejri (before epoch)
      *
-     * @param field You can use [Calendar.YEAR], [Calendar.MONTH], [Calendar.DATE], [Calendar.HOUR_OF_DAY], [Calendar.MINUTE], [Calendar.SECOND], [Calendar.MILLISECOND]
+     * @param field You can use [MyCalendar.YEAR], [MyCalendar.MONTH], [MyCalendar.DATE], [MyCalendar.HOUR_OF_DAY], [MyCalendar.MINUTE], [MyCalendar.SECOND], [MyCalendar.MILLISECOND]
      */
     fun addPersianDate(field: Int, amount: Int) {
         if (amount == 0) {
@@ -264,11 +278,11 @@ class PersianCalendar : GregorianCalendar {
         }
         require(!(field < 0 || field >= ZONE_OFFSET))
         if (field == YEAR) {
-            setPersianDate(persianYear + amount, persianMonth, persianDay)
+            setCalendarDate(calendarYear + amount, calendarMonth, calendarDay)
             return
         } else if (field == MONTH) {
-            setPersianDate(
-                persianYear + (persianMonth + amount) / 12, (persianMonth + amount) % 12, persianDay
+            setCalendarDate(
+                calendarYear + (calendarMonth + amount) / 12, (calendarMonth + amount) % 12, calendarDay
             )
             return
         }
@@ -281,13 +295,13 @@ class PersianCalendar : GregorianCalendar {
      */
     fun parse(dateString: String) {
         val parser = PersianDateParser(dateString, delimiter).persianDate
-        setPersianDate(parser.persianYear, parser.persianMonth, parser.persianDay)
+        setCalendarDate(parser.calendarYear, parser.calendarMonth, parser.calendarDay)
     }
 
-    fun getMonthLength(): Int = if (persianMonth == 12 && isPersianLeapYear) {
+    fun getMonthLength(): Int = if (calendarMonth == 12 && isPersianLeapYear) {
         30
     } else {
-        persianDaysInMonth[persianMonth - 1]
+        persianDaysInMonth[calendarMonth - 1]
     }
 
     private fun convertToMillis(julianDate: Long): Long =
@@ -303,9 +317,9 @@ class PersianCalendar : GregorianCalendar {
     private fun calculatePersianDate() {
         val persianYearMonthDay =
             gregorianToJalali(YearMonthDay(get(YEAR), get(MONTH), get(DAY_OF_MONTH)))
-        persianYear = persianYearMonthDay.year
-        persianMonth = persianYearMonthDay.month
-        persianDay = persianYearMonthDay.day
+        calendarYear = persianYearMonthDay.year
+        calendarMonth = persianYearMonthDay.month
+        calendarDay = persianYearMonthDay.day
     }
 
     private fun formatToMilitary(i: Int): String = if (i <= 9) "0$i" else i.toString()
@@ -319,8 +333,7 @@ class PersianCalendar : GregorianCalendar {
 
     companion object {
 
-        private val gregorianDaysInMonth =
-            intArrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+        private val gregorianDaysInMonth = intArrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
         private val persianDaysInMonth = intArrayOf(31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29)
 
         private fun gregorianToJalali(gregorian: YearMonthDay): YearMonthDay {

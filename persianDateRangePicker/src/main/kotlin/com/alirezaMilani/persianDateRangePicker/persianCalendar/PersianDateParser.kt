@@ -6,7 +6,7 @@ package com.alirezaMilani.persianDateRangePicker.persianCalendar
  */
 class PersianDateParser(private var dateString: String, private var delimiter: String = "/") {
 
-    val persianDate: PersianCalendar
+    val persianDate: MyCalendar
         get() {
             val tokens = splitDateString(dateString)
             val year = tokens[0].toInt()
@@ -15,8 +15,8 @@ class PersianDateParser(private var dateString: String, private var delimiter: S
 
             checkPersianDateValidation(year, month, day)
 
-            val persianCalendar = PersianCalendar()
-            persianCalendar.setPersianDate(year, month, day)
+            val persianCalendar = MyCalendar()
+            persianCalendar.setCalendarDate(year, month, day)
 
             return persianCalendar
         }

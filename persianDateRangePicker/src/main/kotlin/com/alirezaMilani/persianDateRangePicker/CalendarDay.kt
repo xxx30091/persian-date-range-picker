@@ -1,10 +1,12 @@
 package com.alirezaMilani.persianDateRangePicker
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
@@ -38,6 +40,7 @@ fun CalendarDay(
     date: Int,
     selected: Boolean,
     dayType: DayType,
+    isRtl: Boolean,
     isRangeFill: Boolean = false,
     enabled: Boolean = true,
     colors: DateRangePickerColors = DateRangePickerDefaults.colors(),
@@ -51,18 +54,35 @@ fun CalendarDay(
             .size(DateRangePickerTokens.DayParentSize)
             .drawBehind {
                 inset(vertical = padding) {
-                    if (dayType == DayType.Start) {
-                        drawRect(
-                            color = colors.rangeDateContainerColor,
-                            topLeft = Offset(x = 0f, y = 0f),
-                            size = Size(size.width / 2f, size.height)
-                        )
-                    } else if (dayType == DayType.End) {
-                        drawRect(
-                            color = colors.rangeDateContainerColor,
-                            topLeft = Offset(x = size.width / 2f, y = 0f)
-                        )
+                    when {
+                        dayType == DayType.Start && isRtl -> {
+                            drawRect(
+                                color = colors.rangeDateContainerColor,
+                                topLeft = Offset(x = 0f, y = 0f),
+                                size = Size(size.width / 2f, size.height)
+                            )
+                        }
+                        dayType == DayType.Start && !isRtl -> {
+                            drawRect(
+                                color = colors.rangeDateContainerColor,
+                                topLeft = Offset(x = size.width / 2f, y = 0f),
+                            )
+                        }
+                        dayType == DayType.End && isRtl -> {
+                            drawRect(
+                                color = colors.rangeDateContainerColor,
+                                topLeft = Offset(x = size.width / 2f, y = 0f),
+                            )
+                        }
+                        dayType == DayType.End && !isRtl -> {
+                            drawRect(
+                                color = colors.rangeDateContainerColor,
+                                topLeft = Offset(x = 0f, y = 0f),
+                                size = Size(size.width / 2f, size.height)
+                            )
+                        }
                     }
+
 
                     if (isRangeFill) {
                         drawRect(
@@ -103,5 +123,5 @@ fun CalendarDay(
 @Preview
 @Composable
 fun CalendarDayPreview() {
-    CalendarDay(1, true, DayType.Today)
+    CalendarDay(1, false, DayType.Today, isRtl = true)
 }

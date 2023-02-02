@@ -21,8 +21,10 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import androidx.compose.ui.tooling.preview.Preview
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
 
 /**
  * A header layout to show in top of [DateRangePicker]
@@ -37,7 +39,8 @@ fun HeaderDate(
     saveLabel: String,
     title: String,
     onCloseClick: () -> Unit,
-    onConfirmClick: (start: PersianCalendar, end: PersianCalendar) -> Unit
+    onConfirmClick: (start: MyCalendar, end: MyCalendar) -> Unit,
+    hasSelectedDate: Boolean = true
 ) {
     CompositionLocalProvider(LocalContentColor provides colors.headerContentColor) {
         Column(
@@ -66,8 +69,8 @@ fun HeaderDate(
                 TextButton(
                     onClick = {
                         onConfirmClick(
-                            PersianCalendar(state.selectedStartDate!!),
-                            PersianCalendar(state.selectedEndDate!!)
+                            MyCalendar(state.selectedStartDate!!),
+                            MyCalendar(state.selectedEndDate!!)
                         )
                     },
                     enabled = state.isSelectionComplete(),
@@ -78,7 +81,8 @@ fun HeaderDate(
                 ) {
                     Text(
                         text = saveLabel,
-                        modifier = Modifier.padding(horizontal = DateRangePickerTokens.SaveTextButtonPadding)
+                        modifier = Modifier.padding(horizontal = DateRangePickerTokens.SaveTextButtonPadding),
+                        color = if (hasSelectedDate) Color.White else Color.LightGray
                     )
                 }
             }
@@ -94,7 +98,7 @@ fun HeaderDate(
             Text(
                 modifier = Modifier
                     .paddingFromBaseline(DateRangePickerTokens.HeaderSelectionTextPaddingFromBaseline)
-                    .padding(start = DateRangePickerTokens.HeaderTextPadding)
+                    .padding(start = DateRangePickerTokens.HeaderTextPadding, end = DateRangePickerTokens.HeaderTextPadding)
                     .fillMaxWidth(),
                 text = state.updateHeader(),
                 overflow = TextOverflow.Ellipsis,
@@ -105,4 +109,21 @@ fun HeaderDate(
             )
         }
     }
+}
+
+val initialDates: Pair<MyCalendar, MyCalendar>? = null
+val yearRange: IntRange = IntRange(1400, 1401)
+
+@Preview
+@Composable
+fun PreviewHeaderDate() {
+    val state = rememberDateRangePickerState(initialDates, yearRange)
+    HeaderDate(
+        colors = DateRangePickerDefaults.colors(),
+        state = state,
+        saveLabel = "Save Label",
+        title = "Title",
+        onCloseClick = { /*TODO*/ },
+        onConfirmClick = {_, _  ->}
+    )
 }

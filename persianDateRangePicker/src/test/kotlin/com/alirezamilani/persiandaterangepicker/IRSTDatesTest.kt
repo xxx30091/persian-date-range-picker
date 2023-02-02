@@ -1,7 +1,7 @@
 package com.alirezamilani.persiandaterangepicker
 
 import com.alirezaMilani.persianDateRangePicker.IRSTDates
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
 import org.junit.Assert
 import org.junit.Test
 import java.util.*
@@ -16,7 +16,7 @@ class IRSTDatesTest {
     fun getTodayCalendar() {
         val todayCalendar = IRSTDates.getTodayCalendar()
 
-        Assert.assertEquals(PersianCalendar(), todayCalendar)
+        Assert.assertEquals(MyCalendar(), todayCalendar)
     }
 
     @Test
@@ -28,7 +28,7 @@ class IRSTDatesTest {
 
     @Test
     fun getUtcCalendarOf_ReturnFirstMomentOfCurrentDate() {
-        val expected = PersianCalendar().also {
+        val expected = MyCalendar().also {
             it.set(Calendar.HOUR_OF_DAY, 0)
             it.set(Calendar.MINUTE, 0)
             it.set(Calendar.SECOND, 0)

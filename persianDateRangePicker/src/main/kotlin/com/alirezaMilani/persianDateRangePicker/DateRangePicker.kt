@@ -1,5 +1,7 @@
 package com.alirezaMilani.persianDateRangePicker
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,11 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
+import java.util.Calendar
 
 /**
  * A date range picker body layout
@@ -49,14 +53,14 @@ import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
 @Composable
 fun DateRangePicker(
     modifier: Modifier = Modifier,
-    initialDates: Pair<PersianCalendar, PersianCalendar>? = null,
+    initialDates: Pair<MyCalendar, MyCalendar>? = null,
     yearRange: IntRange = IntRange(1400, 1401),
     colors: DateRangePickerColors = DateRangePickerDefaults.colors(),
     title: String? = null,
     saveLabel: String? = null,
     isRtl: Boolean = true,
     onCloseClick: () -> Unit,
-    onConfirmClick: (start: PersianCalendar, end: PersianCalendar) -> Unit
+    onConfirmClick: (start: MyCalendar, end: MyCalendar) -> Unit
 ) {
     val state = rememberDateRangePickerState(initialDates, yearRange)
 
@@ -70,8 +74,9 @@ fun DateRangePicker(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HeaderDate(colors, state, headerSaveLabel, headerTitle, onCloseClick, onConfirmClick)
+            HeaderDate(colors, state, headerSaveLabel, headerTitle, onCloseClick, onConfirmClick, )
 
+            // 週標題
             LazyVerticalGrid(
                 columns = Fixed(7),
                 modifier = Modifier
@@ -102,17 +107,21 @@ fun DateRangePicker(
                 initialFirstVisibleItemIndex = state.position
             )
 
+            // 月曆部分
             LazyColumn(
-                modifier = modifier.fillMaxWidth(),
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(Color.White),
                 state = listState,
                 contentPadding = PaddingValues(horizontal = DateRangePickerTokens.ContentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(
                     items = state.months,
-                    key = { it.timeInMillis },
-                    contentType = { PersianCalendar::class }
+//                    key = { it.timeInMillis },
+                    contentType = { MyCalendar::class }
                 ) { calendar ->
+                    Log.i("Arthur_test", "${calendar.timeInMillis}")
                     Text(
                         modifier = Modifier
                             .fillParentMaxWidth()
@@ -127,9 +136,11 @@ fun DateRangePicker(
 
                     CalendarMonth(
                         state = state,
+                        isRtl = isRtl,
                         colors = colors,
                         calendar = calendar
                     )
+//                    Log.i("Arthur_test", "${it.timeInMillis}")
                 }
             }
         }
@@ -139,11 +150,11 @@ fun DateRangePicker(
 @Preview
 @Composable
 fun DateRangePickerPreview() {
-    val start = PersianCalendar().apply {
-        setPersianDate(1370, 1, 1)
+    val start = MyCalendar().apply {
+        setCalendarDate(1370, 1, 1)
     }
-    val end = PersianCalendar().apply {
-        setPersianDate(1370, 1, 4)
+    val end = MyCalendar().apply {
+        setCalendarDate(1370, 1, 4)
     }
 
     DateRangePicker(

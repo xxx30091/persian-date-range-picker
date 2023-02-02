@@ -1,5 +1,6 @@
 package com.alirezaMilani.persianDateRangePicker
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
@@ -8,9 +9,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
 
 /**
  * A layout to show days of month
@@ -20,10 +22,11 @@ import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
  */
 @Composable
 fun CalendarMonth(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.background(Color.White),
+    isRtl: Boolean,
     state: DateRangePickerState = rememberDateRangePickerState(yearRange = IntRange(1400, 1401)),
     colors: DateRangePickerColors = DateRangePickerDefaults.colors(),
-    calendar: PersianCalendar
+    calendar: MyCalendar
 ) {
     val (firstDay, numDays) = remember { state.getDates(calendar) }
     val datesList = remember { IntRange(1, numDays).toList() }
@@ -43,7 +46,7 @@ fun CalendarMonth(
         }
 
         items(datesList) { date ->
-            val currentDate = (calendar.clone() as PersianCalendar).apply {
+            val currentDate = (calendar.clone() as MyCalendar).apply {
                 setPersianDay(date)
             }
             val isSelected = remember(state.selectedStartDate, state.selectedEndDate) {
@@ -62,6 +65,7 @@ fun CalendarMonth(
                 date = date,
                 selected = isSelected,
                 dayType = dayType,
+                isRtl = isRtl,
                 isRangeFill = isRangeFill,
                 colors = colors,
                 onClick = { state.select(currentDate.timeInMillis) }
@@ -73,9 +77,9 @@ fun CalendarMonth(
 @Preview
 @Composable
 fun CalendarMonthPreview() {
-    val calendar = PersianCalendar().apply {
-        setPersianYear(1370)
-        setPersianMonth(4)
+    val calendar = MyCalendar().apply {
+        setCalendarYear(2023)
+        setPersianMonth(2)
     }
-    CalendarMonth(calendar = calendar)
+    CalendarMonth(calendar = calendar, isRtl = false)
 }

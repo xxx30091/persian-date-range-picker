@@ -1,7 +1,7 @@
 package com.alirezaMilani.persianDateRangePicker
 
 import com.alirezaMilani.persianDateRangePicker.IRSTDates.Companion
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,18 +21,19 @@ object DateStrings {
         if (userDefinedDateFormat != null) {
             val date = Date(timeInMillis)
             return userDefinedDateFormat.format(date)
-        } else if (currentCalendar.persianYear == calendarDate.persianYear) {
+        } else if (currentCalendar.calendarYear == calendarDate.calendarYear) {
             return getMonthDay(calendarDate)
         }
 
         return getYearMonthDay(calendarDate)
     }
 
-    private fun getMonthDay(calendar: PersianCalendar): String =
-        calendar.run { "$persianDay $persianMonthName" }
+    private fun getMonthDay(calendar: MyCalendar): String =
+        calendar.run { "$calendarDay $calendarMonthName" }
 
-    private fun getYearMonthDay(calendar: PersianCalendar): String =
-        calendar.run { "$persianDay $persianMonthName ,$persianYear" }
+    private fun getYearMonthDay(calendar: MyCalendar): String =
+        calendar.run { "$calendarDay $calendarMonthName ,$calendarYear" }
+//        calendar.run { "$calendarDay $calendarMonthName ,$calendarYear" }
 
     fun getDateRangeString(start: Long?, end: Long?): Pair<String?, String?> {
         if (start == null && end == null) {
@@ -51,8 +52,8 @@ object DateStrings {
             timeInMillis = end
         }
 
-        if (startCalendar.persianYear == endCalendar.persianYear) {
-            return if (startCalendar.persianYear == currentCalendar.persianYear) {
+        if (startCalendar.calendarYear == endCalendar.calendarYear) {
+            return if (startCalendar.calendarYear == currentCalendar.calendarYear) {
                 Pair(getMonthDay(startCalendar), getMonthDay(endCalendar))
             } else {
                 Pair(getMonthDay(startCalendar), getYearMonthDay(endCalendar))

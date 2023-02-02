@@ -1,13 +1,14 @@
 package com.alirezaMilani.persianDateRangePicker
 
 import android.content.res.Resources
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendar
+import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
 import java.util.*
 
 /**
@@ -26,7 +27,7 @@ class DateRangePickerState(
 
     var position: Int by mutableStateOf(0)
 
-    val months = mutableListOf<PersianCalendar>()
+    val months = mutableListOf<MyCalendar>()
 
     init {
         if (initialDates != null) {
@@ -40,7 +41,7 @@ class DateRangePickerState(
      */
     private fun getMonths(yearRange: IntRange) {
         val calendar = if (initialDates?.first != null) {
-            IRSTDates.getCalendarOf(PersianCalendar(initialDates.first!!))
+            IRSTDates.getCalendarOf(MyCalendar(initialDates.first!!))
         } else {
             IRSTDates.getTodayCalendar()
         }
@@ -49,7 +50,7 @@ class DateRangePickerState(
             val currentCalendar = IRSTDates.getCalendar(
                 year = yearRange.first + (i / 12), month = i % 12 + 1, day = 1
             )
-            if (currentCalendar.persianYear == calendar.persianYear && currentCalendar.persianMonth == calendar.persianMonth) {
+            if (currentCalendar.calendarYear == calendar.calendarYear && currentCalendar.calendarMonth == calendar.calendarMonth) {
                 position = i
             }
 
@@ -162,7 +163,7 @@ class DateRangePickerState(
     /**
      * @return first day of [calendar] and number of days in this month
      */
-    fun getDates(calendar: PersianCalendar): Pair<Int, Int> {
+    fun getDates(calendar: MyCalendar): Pair<Int, Int> {
         val numDays = calendar.getMonthLength()
 
         val firstDay = calendar.run {
@@ -176,14 +177,22 @@ class DateRangePickerState(
         return Pair(firstDay, numDays)
     }
 
-    fun getLongName(date: PersianCalendar): String {
-        return "${date.persianMonthName} ${date.persianYear}"
+    fun getLongName(date: MyCalendar): String {
+        return "${date.calendarMonthName} ${date.calendarYear}"
     }
 
     /**
      * Creates abbreviation of persian days of week
      */
-    fun getDisplayNameOfDay(): List<String> = listOf("ش", "ی", "د", "س", "چ", "پ", "ج")
+    fun getDisplayNameOfDay(): List<String> = listOf(
+        "日",
+        "一",
+        "二",
+        "三",
+        "四",
+        "五",
+        "六"
+    )
 
     /**
      * Shows text in calendar's header according to selected start and end dates
@@ -229,7 +238,7 @@ class DateRangePickerState(
  */
 @Composable
 fun rememberDateRangePickerState(
-    initialDates: Pair<PersianCalendar, PersianCalendar>? = null,
+    initialDates: Pair<MyCalendar, MyCalendar>? = null,
     yearRange: IntRange,
     resources: Resources = LocalContext.current.resources
 ): DateRangePickerState {
@@ -241,3 +250,5 @@ fun rememberDateRangePickerState(
         DateRangePickerState(startEndDates, yearRange, resources)
     }
 }
+
+
