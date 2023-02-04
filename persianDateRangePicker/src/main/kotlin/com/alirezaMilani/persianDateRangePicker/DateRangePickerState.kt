@@ -171,6 +171,7 @@ class DateRangePickerState(
             val day = calendar[Calendar.DAY_OF_WEEK]
             // When day is Saturday, the above line returns value equal 7 and this isn't be useful,
             // must be convert to 0
+            Log.i("Arthur_test", "date_range_picker_state, day of week: $day, ${Calendar.DAY_OF_WEEK}")
             if (day == 7) 0 else day
         }
 
@@ -226,7 +227,8 @@ class DateRangePickerState(
      * @return number of week in month
      */
     fun getMaximumWeeks(firstDay: Int, numDays: Int): Int {
-        return if ((firstDay == 6 && numDays >= 30) || (firstDay == 5 && numDays == 31)) 6 else 5
+        return if ((firstDay == 6 && numDays >= 30) || (firstDay == 5 && numDays == 31) || (firstDay == 6 && numDays == 29)) 6
+        else if (firstDay == 0 && numDays == 28) 4 else 5
     }
 }
 

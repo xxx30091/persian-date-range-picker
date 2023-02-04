@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.alirezaMilani.persianDateRangePicker.persianCalendar.MyCalendar
@@ -95,6 +96,7 @@ fun HeaderDate(
                 style = MaterialTheme.typography.labelMedium
             )
 
+            // 日期
             Text(
                 modifier = Modifier
                     .paddingFromBaseline(DateRangePickerTokens.HeaderSelectionTextPaddingFromBaseline)
@@ -112,15 +114,15 @@ fun HeaderDate(
 }
 
 val initialDates: Pair<MyCalendar, MyCalendar>? = null
-val yearRange: IntRange = IntRange(1400, 1401)
+val yearRange: IntRange = IntRange(2022, 2023)
 
 @Preview
 @Composable
 fun PreviewHeaderDate() {
-    val state = rememberDateRangePickerState(initialDates, yearRange)
+//    val state = rememberDateRangePickerState(initialDates, yearRange)
     HeaderDate(
         colors = DateRangePickerDefaults.colors(),
-        state = state,
+        state = DateRangePickerState(Pair(0L, 86400000L), yearRange, LocalContext.current.resources),
         saveLabel = "Save Label",
         title = "Title",
         onCloseClick = { /*TODO*/ },

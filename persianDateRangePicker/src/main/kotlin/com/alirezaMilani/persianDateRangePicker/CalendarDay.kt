@@ -1,5 +1,6 @@
 package com.alirezaMilani.persianDateRangePicker
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,7 +49,7 @@ fun CalendarDay(
     onClick: () -> Unit = {},
 ) {
     val padding = with(LocalDensity.current) { 4.dp.toPx() }
-
+    Log.i("Arthur_test", "date: $date")
     Box(
         modifier = Modifier
             .size(DateRangePickerTokens.DayParentSize)

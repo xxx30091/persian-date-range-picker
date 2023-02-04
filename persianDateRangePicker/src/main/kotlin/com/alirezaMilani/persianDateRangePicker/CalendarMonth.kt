@@ -41,6 +41,7 @@ fun CalendarMonth(
         userScrollEnabled = false
     ) {
 
+        // 計算每月第一日前空格數
         for (x in 0 until firstDay) {
             item { Box(Modifier.size(DateRangePickerTokens.DayParentSize)) }
         }
@@ -77,9 +78,9 @@ fun CalendarMonth(
 @Preview
 @Composable
 fun CalendarMonthPreview() {
-    val calendar = MyCalendar().apply {
-        setCalendarYear(2023)
-        setPersianMonth(2)
-    }
-    CalendarMonth(calendar = calendar, isRtl = false)
+//    val calendar = MyCalendar().apply {
+//        setCalendarYear(2023)
+//        setPersianMonth(2)
+//    }
+    CalendarMonth(calendar = MyCalendar(), isRtl = false)
 }

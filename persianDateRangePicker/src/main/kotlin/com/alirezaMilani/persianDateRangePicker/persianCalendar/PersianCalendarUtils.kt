@@ -1,6 +1,6 @@
 package com.alirezaMilani.persianDateRangePicker.persianCalendar
 
-import kotlin.math.ceil
+import java.text.SimpleDateFormat
 import kotlin.math.floor
 
 /**
@@ -31,6 +31,11 @@ class PersianCalendarUtils {
                 (PersianCalendarConstants.PERSIAN_EPOCH - 1L) +
                 (1029983L * floor((year - 474L) / 2820.0).toLong()) +
                 (if (month < 7) 31 * month else 30 * month + 6) + day
+//            val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+//            val monthStr = if (month < 10) "0$month" else "$month"
+//            val dayStr = if (day < 10) "0$day" else "$day"
+//
+//            return dateFormat.parse("$year-$monthStr-$dayStr")?.time ?: 0L
         }
 
         /**
@@ -65,12 +70,12 @@ class PersianCalendarUtils {
         /**
          * Calculate whether current year is Leap year in persian or not
          */
-        fun isPersianLeapYear(persianYear: Int): Boolean {
-            val ceil = ceil(
-                (38.0 + (ceil((persianYear - 474).toDouble(), 2820.0) + 474)) * 682.0,
-                2816.0
-            )
-            return ceil < 682
-        }
+//        fun isPersianLeapYear(persianYear: Int): Boolean {
+//            val ceil = ceil(
+//                (38.0 + (ceil((persianYear - 474).toDouble(), 2820.0) + 474)) * 682.0,
+//                2816.0
+//            )
+//            return ceil < 682
+//        }
     }
 }

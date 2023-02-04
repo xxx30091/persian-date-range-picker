@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
                         title = "SELECT DATES",
                         saveLabel = null,
                         isRtl = false,
-                        yearRange = IntRange(2000, 2050),
+                        yearRange = IntRange(2022, 2022),
                         onCloseClick = {  },
                         onConfirmClick = { _, _ -> Log.i("Arthur_test", "start: ${start.selectedDate}, end: ${end.selectedDate}")}
                     )

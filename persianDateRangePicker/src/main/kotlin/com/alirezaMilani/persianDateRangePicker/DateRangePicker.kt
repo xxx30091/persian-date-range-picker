@@ -54,11 +54,11 @@ import java.util.Calendar
 fun DateRangePicker(
     modifier: Modifier = Modifier,
     initialDates: Pair<MyCalendar, MyCalendar>? = null,
-    yearRange: IntRange = IntRange(1400, 1401),
+    yearRange: IntRange = IntRange(2023, 2025),
     colors: DateRangePickerColors = DateRangePickerDefaults.colors(),
     title: String? = null,
     saveLabel: String? = null,
-    isRtl: Boolean = true,
+    isRtl: Boolean = false,
     onCloseClick: () -> Unit,
     onConfirmClick: (start: MyCalendar, end: MyCalendar) -> Unit
 ) {
@@ -74,9 +74,10 @@ fun DateRangePicker(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // 顯示所選日期部分
             HeaderDate(colors, state, headerSaveLabel, headerTitle, onCloseClick, onConfirmClick, )
 
-            // 週標題
+            // 週日-週六 標題
             LazyVerticalGrid(
                 columns = Fixed(7),
                 modifier = Modifier
@@ -103,6 +104,7 @@ fun DateRangePicker(
                 }
             }
 
+
             val listState = rememberLazyListState(
                 initialFirstVisibleItemIndex = state.position
             )
@@ -118,10 +120,11 @@ fun DateRangePicker(
             ) {
                 items(
                     items = state.months,
+//                    key = { state.position },
 //                    key = { it.timeInMillis },
                     contentType = { MyCalendar::class }
                 ) { calendar ->
-                    Log.i("Arthur_test", "${calendar.timeInMillis}")
+                    Log.i("Arthur_test", "date_range_picker, ${state.months}")
                     Text(
                         modifier = Modifier
                             .fillParentMaxWidth()
@@ -151,10 +154,10 @@ fun DateRangePicker(
 @Composable
 fun DateRangePickerPreview() {
     val start = MyCalendar().apply {
-        setCalendarDate(1370, 1, 1)
+        setCalendarDate(2023, 1, 1)
     }
     val end = MyCalendar().apply {
-        setCalendarDate(1370, 1, 4)
+        setCalendarDate(2023, 1, 4)
     }
 
     DateRangePicker(

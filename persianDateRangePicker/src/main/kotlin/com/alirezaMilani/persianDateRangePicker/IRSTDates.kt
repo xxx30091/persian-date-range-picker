@@ -13,7 +13,7 @@ import java.util.*
 class IRSTDates {
 
     companion object {
-        private val timeZone: TimeZone = TimeZone.getTimeZone("IRST")
+        private val timeZone: TimeZone = TimeZone.getTimeZone("Asia/Taipei")
 
         /**
          * Returns a [MyCalendar] object in IRST time zone representing the first moment of current date.

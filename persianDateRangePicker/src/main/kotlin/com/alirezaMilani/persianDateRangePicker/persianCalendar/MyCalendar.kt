@@ -1,5 +1,6 @@
 package com.alirezaMilani.persianDateRangePicker.persianCalendar
 
+import android.util.Log
 import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendarConstants.Companion.MILLIS_JULIAN_EPOCH
 import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendarConstants.Companion.MILLIS_OF_A_DAY
 import com.alirezaMilani.persianDateRangePicker.persianCalendar.PersianCalendarUtils.Companion.ceil
@@ -140,16 +141,9 @@ class MyCalendar : GregorianCalendar {
      * Determines if the given year is a leap year in persian calendar.
      * Returns true if the given year is a leap year.
      */
-    val isPersianLeapYear: Boolean
-        get() = PersianCalendarUtils.isPersianLeapYear(calendarYear)
+//    val isPersianLeapYear: Boolean
+//        get() = PersianCalendarUtils.isPersianLeapYear(calendarYear)
 
-    /**
-     * Most of the time we don't care about TimeZone when we persisting Date or
-     * doing some calculation on date. **Default TimeZone was set to
-     * "GMT"** in order to make developer to work more convenient with
-     * the library; however you can change the TimeZone as you do in
-     * GregorianCalendar by calling setTimeZone()
-     */
     constructor(millis: Long) {
         timeInMillis = millis
     }
@@ -165,7 +159,8 @@ class MyCalendar : GregorianCalendar {
 
     override fun toString(): String {
         val str = super.toString()
-        return str.substring(0, str.length - 1) + ",PersianDate=" + persianShortDate + "]"
+        return str
+//        return str.substring(0, str.length - 1) + ",PersianDate=" + persianShortDate + "]"
     }
 
     override fun set(field: Int, value: Int) {
@@ -187,6 +182,7 @@ class MyCalendar : GregorianCalendar {
      * Set the persian date it converts PersianDate to the Julian and
      * assigned equivalent milliseconds to the instance
      */
+
     fun setCalendarDate(year: Int, month: Int, day: Int) {
         calendarYear = year
         calendarMonth = month - 1
@@ -195,34 +191,35 @@ class MyCalendar : GregorianCalendar {
         val gregorianYearMonthDay =
             persianToGregorian(YearMonthDay(calendarYear, this.calendarMonth - 1, calendarDay))
         set(gregorianYearMonthDay.year, gregorianYearMonthDay.month, gregorianYearMonthDay.day)
+//        set(calendarYear, calendarMonth, calendarDay)
     }
 
-    fun setCalendarYear(year: Int) {
-        calendarYear = year
-
-        timeInMillis = convertToMillis(
-            PersianCalendarUtils.persianToJulian(
-                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
-                calendarMonth - 1,
-                1
-            )
-        )
-    }
-
-    /**
-     * Specify month and set 1 for day of specific month
-     */
-    fun setPersianMonth(month: Int) {
-        calendarMonth = month - 1
-
-        timeInMillis = convertToMillis(
-            PersianCalendarUtils.persianToJulian(
-                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
-                calendarMonth - 1,
-                1
-            )
-        )
-    }
+    // 這 2 個沒用到
+//    fun setCalendarYear(year: Int) {
+//        calendarYear = year
+//
+//        timeInMillis = convertToMillis(
+//            PersianCalendarUtils.persianToJulian(
+//                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
+//                calendarMonth - 1,
+//                1
+//            )
+//        )
+//    }
+//    /**
+//     * Specify month and set 1 for day of specific month
+//     */
+//    fun setPersianMonth(month: Int) {
+//        calendarMonth = month - 1
+//
+//        timeInMillis = convertToMillis(
+//            PersianCalendarUtils.persianToJulian(
+//                if (calendarYear > 0) calendarYear.toLong() else calendarYear + 1.toLong(),
+//                calendarMonth - 1,
+//                1
+//            )
+//        )
+//    }
 
     fun setPersianDay(day: Int) {
         calendarDay = day
@@ -234,13 +231,8 @@ class MyCalendar : GregorianCalendar {
                 calendarDay
             )
         )
-    }
-
-    fun setGregorianDay(day: Int) {
-        calendarDay = day
-//        timeInMillis = convertToMillis(
-//
-//        )
+//        Log.i("Arthur_test", "my_calendar, setPersianDay: day = $day")
+//        timeInMillis = convertToTimeInMillis(calendarYear, calendarMonth, calendarDay)
     }
 
     override fun compareTo(other: java.util.Calendar): Int {
@@ -271,44 +263,53 @@ class MyCalendar : GregorianCalendar {
      *
      * @param field You can use [MyCalendar.YEAR], [MyCalendar.MONTH], [MyCalendar.DATE], [MyCalendar.HOUR_OF_DAY], [MyCalendar.MINUTE], [MyCalendar.SECOND], [MyCalendar.MILLISECOND]
      */
-    fun addPersianDate(field: Int, amount: Int) {
-        if (amount == 0) {
-            // Do nothing!
-            return
-        }
-        require(!(field < 0 || field >= ZONE_OFFSET))
-        if (field == YEAR) {
-            setCalendarDate(calendarYear + amount, calendarMonth, calendarDay)
-            return
-        } else if (field == MONTH) {
-            setCalendarDate(
-                calendarYear + (calendarMonth + amount) / 12, (calendarMonth + amount) % 12, calendarDay
-            )
-            return
-        }
-        add(field, amount)
-        calculatePersianDate()
-    }
+//    fun addPersianDate(field: Int, amount: Int) {
+//        if (amount == 0) {
+//            // Do nothing!
+//            return
+//        }
+//        require(!(field < 0 || field >= ZONE_OFFSET))
+//        if (field == YEAR) {
+//            setCalendarDate(calendarYear + amount, calendarMonth, calendarDay)
+//            return
+//        } else if (field == MONTH) {
+//            setCalendarDate(
+//                calendarYear + (calendarMonth + amount) / 12, (calendarMonth + amount) % 12, calendarDay
+//            )
+//            return
+//        }
+//        add(field, amount)
+//        calculatePersianDate()
+//    }
 
     /**
      * Use [PersianDateParser] to parse string and get the Persian Date.
      */
-    fun parse(dateString: String) {
-        val parser = PersianDateParser(dateString, delimiter).persianDate
-        setCalendarDate(parser.calendarYear, parser.calendarMonth, parser.calendarDay)
-    }
+//    fun parse(dateString: String) {
+//        val parser = PersianDateParser(dateString, delimiter).persianDate
+//        setCalendarDate(parser.calendarYear, parser.calendarMonth, parser.calendarDay)
+//    }
 
-    fun getMonthLength(): Int = if (calendarMonth == 12 && isPersianLeapYear) {
-        30
+//    fun getMonthLength(): Int = if (calendarMonth == 12 && isPersianLeapYear) {
+//        30
+//    } else {
+//        gregorianDaysInMonth[calendarMonth - 1]
+//    }
+
+
+//    gregorian.year % 4 == 0 && gregorian.year % 100 != 0 || gregorian.year % 400 == 0
+    /**
+     * 每一個可以被4整除的年份都是閏年，但可以被100整除的年份，必須也能被400整除才是閏年。
+     * 因此，1700年、1800年、和1900年都不是閏年，而2000年是閏年[6]。
+     */
+    fun getMonthLength(): Int = if (calendarMonth == 2 && calendarYear % 4 == 0 && calendarYear % 100 != 0 || calendarYear % 400 == 0) {
+        29
     } else {
-        persianDaysInMonth[calendarMonth - 1]
+        gregorianDaysInMonth[calendarMonth - 1]
     }
 
     private fun convertToMillis(julianDate: Long): Long =
-        MILLIS_JULIAN_EPOCH + julianDate * MILLIS_OF_A_DAY + ceil(
-            (timeInMillis - MILLIS_JULIAN_EPOCH.toDouble()),
-            MILLIS_OF_A_DAY.toDouble()
-        )
+        MILLIS_JULIAN_EPOCH + julianDate * MILLIS_OF_A_DAY + ceil((timeInMillis - MILLIS_JULIAN_EPOCH.toDouble()), MILLIS_OF_A_DAY.toDouble())
 
     /**
      * Calculate persian date from current Date and populates the corresponding
@@ -317,9 +318,11 @@ class MyCalendar : GregorianCalendar {
     private fun calculatePersianDate() {
         val persianYearMonthDay =
             gregorianToJalali(YearMonthDay(get(YEAR), get(MONTH), get(DAY_OF_MONTH)))
+
         calendarYear = persianYearMonthDay.year
         calendarMonth = persianYearMonthDay.month
         calendarDay = persianYearMonthDay.day
+//        Log.i("AAA", "$calendarYear, $calendarMonth, $calendarDay")
     }
 
     private fun formatToMilitary(i: Int): String = if (i <= 9) "0$i" else i.toString()
@@ -345,23 +348,32 @@ class MyCalendar : GregorianCalendar {
             var persianDayNo: Int
 
             gregorian.year = gregorian.year - 1600
-            gregorian.day = gregorian.day - 1
+//            gregorian.day = gregorian.day - 1
 
+            /**
+             * 每一個可以被4整除的年份都是閏年，但可以被100整除的年份，必須也能被400整除才是閏年。
+             * 因此，1700年、1800年、和1900年都不是閏年，而2000年是閏年[6]。
+             */
+            // 該從 0 到年份總共有幾天
             var gregorianDayNo: Int =
                 (365 * gregorian.year + floor(((gregorian.year + 3) / 4).toDouble()).toInt() - floor(
                     ((gregorian.year + 99) / 100).toDouble()
                 ).toInt() + floor(((gregorian.year + 399) / 400).toDouble()).toInt())
 
+            // 加上到該月份為止的天數
             var i = 0
             while (i < gregorian.month) {
                 gregorianDayNo += gregorianDaysInMonth[i]
                 ++i
             }
 
+            // 加一日
             if (gregorian.month > 1 && (gregorian.year % 4 == 0 && gregorian.year % 100 != 0 || gregorian.year % 400 == 0)) {
                 ++gregorianDayNo
             }
+            // 加上當前日數
             gregorianDayNo += gregorian.day
+
             persianDayNo = gregorianDayNo - 79
             val persianNP: Int = floor((persianDayNo / 12053).toDouble()).toInt()
             persianDayNo %= 12053
@@ -378,6 +390,8 @@ class MyCalendar : GregorianCalendar {
             }
             persianMonth = i
             persianDay = persianDayNo + 1
+
+//            return YearMonthDay(gregorian.year, gregorian.month, gregorian.day)
             return YearMonthDay(persianYear, persianMonth, persianDay)
         }
 
